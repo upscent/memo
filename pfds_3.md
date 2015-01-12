@@ -166,4 +166,41 @@ fun deleteMin ts = let va ( Node( _, x, ts1 ), ts2 ) = removeMinTree ts
                    in merge( rev ts1, ts2 ) end
 ```
 
-二項木の完璧な実装は
+二項木の完璧な実装は図3.4に示す。4つの主要な操作の最悪ケースは `O(log n)` である。
+
+**問題3.5**
+`findMin` を `romoveMinTree` を用いずに実装せよ。
+
+**問題3.6**
+二項ヒープにおけるランクの注記のほとんどは省略できる。なぜなら、ランク `r` のノードの子ノードには `r-1` ,..., `0` のノードがあることがわかっているからである。このようにして、ランクの注記を取り除き、木のペアのトップレベルにのみラベルをつければ良い。
+
+```sml
+data type Tree = Node of Elem * Tree list
+type Heap = (int * Tree) list
+```
+
+上記の通り二項ヒープを再実装せよ。
+
+**問題3.7**
+二項ヒープと比較したleftist heapの利点の一つとして、 `findMin` が `O(log n)` ではなく `O(1)` 時間であることである。
+以下のファンクターの概略は、最小要素を残りのヒープとは別に保存することで、 `findMin` の計算時間を `O(1)` にしている。
+
+```sml
+functor ExplicitMin( H : Heap ) : Heap = 
+struct
+  structure Elem = H.Elem
+  datatype Heap = E | NE of Elem.T * H.Heap
+  (* 中略 *)
+end
+```
+
+このファンクターは二項ヒープに特化したものではなく、ヒープのあらゆる実装に適応できることに注意してほしい。
+このファンクターを完成させれば、 `findMin` は `O(1)` で、それ以外の `insert` `merger` `deleteMin` は `O(log n)` で操作することができる。
+(実装 `H` のもとで４つの操作が `O(log n)` かそれより良いという仮定のもとで )
+
+```sml
+functor BinomialHeap( Element : Orderer ) : Heap = 
+struct
+  (* 本には書いてるけど省略 *)
+end
+```
