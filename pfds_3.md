@@ -206,6 +206,7 @@ end
 ```
 
 ## 3.3 赤黒木
+
 2.2章で、二分探索木を紹介した。これらの木はランダム、もしくは順序付けされていないデータには向いているが、順序付けられたデータに対しては個々の操作に `O(n)` 時間かかることもあり、あまりよいパフォーマンスを発揮できない。
 この問題の解決方法は、木のバランスをとることである。
 木のバランスをとると、それぞれの操作が `O(log n)` より悪くなることはない。
@@ -234,7 +235,7 @@ datatype Tree  = E | T of Color * Tree * Elem * Tree
 赤黒木の所属関数は色情報を無視する。
 `T` に含まれるワイルドカードを除けば、バランスされていない探索議における所属関数と同じである。
 
-```
+```sml
 fun member( x, E ) = false
   | member( x, T ( _, a, y, b ) ) = 
       if x < y then member( x, a )
@@ -242,4 +243,17 @@ fun member( x, E ) = false
       else true
 ```
 
-挿入関数は、
+挿入関数は、二つの普遍性を維持しなければいけないため、もう少し面白い。
+
+```sml
+fun insert (x, s) =
+  let fun ins E = T (R, E, x, E)
+        | ins (s as T (color, a, y, b)) =
+            if x < y then balance (color, ins a, y, b)
+            else if x > y then balance (color, a, y, ins b)
+            else s
+      val T (_, a, y, b) = ins s
+  in T (B, a, y, b) end
+```
+
+この関数は、
