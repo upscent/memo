@@ -32,7 +32,7 @@ leftist property の結果、任意のノードの右の背骨は常に空ノー
 
 順序付けられた要素のいくつかの構造 `Elem` があるとき、ランク情報で飾り付けられた二分木として leftist heap を表現する。
 
-```
+```sml
 定義
 ```
 
@@ -40,13 +40,13 @@ leftist heap の右背骨上にある要素は順番通りに並べられてい�
 leftist heap の鍵となる知見は、2つのヒープは右背骨をマージして、leftist propertyを保つためにこのパス上のノードの子ノードを入れ替える。
 実装は次の通りである。
 
-```
+```sml
 数式
 ```
 
 `makeT` はTのノードのランクを計算し、必要であれば子ノードの入れ替えを行う補助関数である。
 
-```
+```sml
 数式
 ```
 
@@ -97,13 +97,13 @@ weight-biased leftist heap は leftist heap の一種で、leftist property を 
 
 二項木におけるノードは、要素と子のリストとして表す。便宜上、それぞれのランクで注釈をつけておく。
 
-```
+```sml
 datatype Tree = Node of int × Elem. T × Tree list
 ```
 
 子となるそれぞれのリストはランクの降順に並んでおり、要素はヒープ順(？)に並んでいる。ヒープ順を保つため、小さいルートの木の下に大きいルートの木をつなげるようにする。
 
-```
+```sml
 fun link ...
 ```
 
@@ -111,7 +111,7 @@ fun link ...
 
 二項ヒープは互いに同じランクでないヒープオーダの二項木の集まりである。この集まりはランクの昇順で並ぶ木のリストとして表現される。
 
-```
+```sml
 type Heap = Tree list
 ```
 
@@ -119,7 +119,7 @@ type Heap = Tree list
 
 これで二項ヒープに関する関数を表現する準備ができた。まずは、2進数の増加・追加と似たような定義をされる `insert` と `merge` からはじめる。(これについては第9章で定義する。)ヒープへ新しい要素を挿入するために、まずは1ノードの木(＝ランク0の二項木)を作成する。同じランクの木をlinkしながら、(ヒープに)存在しないランクを見つけるまでランクの昇順に並んでいる木を進んでいく。それぞれのlinkは2進法の桁上がりと一致する。
 
-```
+```sml
 fun rank( Node( r, x, v ) ) = r
 fun insTree( t, [] ) = [ t ]
   | insTree( t, ts as t'::ts' ) =
@@ -142,7 +142,7 @@ fun merge( ts1, [] ) = ts1
 
 `findMin` と `deleteMin` はどちらも `removeMinTree` の補助関数として呼ばれ、2つの木と残りのリストを返しながら、最小のルートを持つ木を探し、それをリストから除去する。
 
-```
+```sml
 fun removeMinTree [t] = ( t, [] )
   | removeMinTree ( t::ts ) =
     let val ( t', ts' ) = removeMinTree ts
@@ -151,7 +151,7 @@ fun removeMinTree [t] = ( t, [] )
 
 `findMin` は抽出された木のルートを返す。
 
-```
+```sml
 fun findMin ts = let val ( t, _ ) = removeMinTree ts in root t end
 ```
 
@@ -161,7 +161,7 @@ fun findMin ts = let val ( t, _ ) = removeMinTree ts in root t end
 それぞれはユニークなランクのヒープオーダーの二項木の集まりになっているが、降順ではなく昇順になっている。
 このように、ひっくり返ることによって子リストを正しい二項ヒープに変換し、リストを残りの木にマージする。
 
-```
+```sml
 fun deleteMin ts = let va ( Node( _, x, ts1 ), ts2 ) = removeMinTree ts
                    in merge( rev ts1, ts2 ) end
 ```
@@ -233,7 +233,7 @@ datatype Tree  = E | T of Color * Tree * Elem * Tree
 
 
 赤黒木の所属関数は色情報を無視する。
-`T` に含まれるワイルドカードを除けば、バランスされていない探索議における所属関数と同じである。
+`T` に含まれるワイルドカード( `_` )を除けば、バランスされていない探索議における所属関数と同じである。
 
 ```sml
 fun member( x, E ) = false
