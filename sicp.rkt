@@ -204,6 +204,29 @@
   (cond ((= a 0) true)
         ((= (expmod a n n) a) (try-it-iter (- a 1) n))
         (else a)))
-  
-  
-  
+
+; 1,28
+
+(define (is-prime-by-miller-rabin-test? n)
+  (define (is-prime-iter times)
+    (cond ((= times 0) true)
+          ((miller-rabin-test n) (is-prime-by-miller-rabin-test? n (- times 1)))
+          (else false)))
+  (is-prime-iter 10))
+
+(define (miller-rabin-test n)
+  (define (try-it a)
+    (= (expmod a (- n 1) n) 1))
+  (define (is-sqrt-mod-n? a)
+    (and
+     (not (= a 1))
+     (not (= a (- n 1)))
+     (= (remainder (square a) n) 1)))
+  (define (expmod base exp m)
+    (cond ((= exp 0) 1)
+          ((is-sqrt-mod-n? base) 1)
+          ((even? exp)
+           (remainder (square (expmod base (/ exp 2) m)) m))
+          (else
+           (remainder (* base (expmod base (- exp 1) m)) m))))
+  (try-it (big-random (- n 1))))
