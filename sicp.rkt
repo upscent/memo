@@ -210,7 +210,7 @@
 (define (is-prime-by-miller-rabin-test? n)
   (define (is-prime-iter times)
     (cond ((= times 0) true)
-          ((miller-rabin-test n) (is-prime-by-miller-rabin-test? n (- times 1)))
+          ((miller-rabin-test n) (is-prime-by-miller-rabin-test? (- times 1)))
           (else false)))
   (is-prime-iter 10))
 
@@ -230,3 +230,28 @@
           (else
            (remainder (* base (expmod base (- exp 1) m)) m))))
   (try-it (big-random (- n 1))))
+
+; 1.29
+
+(define (sum term a next b)
+  (if (> a b)
+      0
+      (+ (term a)
+         (sum term (next a) next b))))
+
+(define (simpson f a b n)
+  (define h (/ (- b a) n))
+  (define (yk k) (f (+ a (* k h))))
+  (define (term x)
+    (cond ((or (= x 0) (= x n)) (yk x))
+          ((even? x) (* 2.0 (yk x)))
+          (else (* 4.0 (yk x)))))
+  (define (next x) (+ x 1))
+  (* (/ h 3) (sum term 0 next n)))
+
+(define (cube x) (* x x x))
+
+(define (integral f a b dx)
+  (define (add-dx x) (+ x dx))
+  (* (sum f (+ a (/ dx 2.0)) add-dx b)
+     dx))
