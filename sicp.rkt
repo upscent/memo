@@ -283,3 +283,47 @@
   (define (identity x) x)
   (define (iter x) (+ x 1))
   (product2 identity 1 iter n))
+
+; 1.32
+
+(define (accumulate1 combiner null-value term a next b)
+  (if (> a b)
+      null-value
+      (combiner
+       (term a)
+       (accumulate1 combiner null-value term (next a) next b))))
+
+(define (accumulate2 combiner null-value term a next b)
+  (define (iter a result)
+    (if (> a b)
+        result
+        (iter (next a) (combiner result (term a)))))
+  (iter a null-value))
+
+; 1.33
+
+(define (filtered-accumulate1 combiner null-value term a next b filter)
+  (if (> a b)
+      null-value
+      (if (filter a)
+          (combiner
+           (term a)
+           (filtered-accumulate1 combiner null-value term (next a) next b filter))
+          (filtered-accumulate1 combiner null-value term (next a) next b filter))))
+
+(define (sum-squared-prime a b)
+  (define (square x) (* x x))
+  (define (inc x) (+ x 1))
+  (filtered-accumulate1 + 0 square a inc b prime?))
+
+; prime hen dayo!!!! naoshi tai yo!!!!!
+
+(define (gcd a b)
+  (if (= b 0)
+      a
+      (gcd b (remainder a b))))
+
+(define (sum-disjoint-num n)
+  (define (inc x) (+ x 1))
+  (define (filter x) (= (gcd x n) 1))
+  (filtered-accumulate1 * 1 identity 1 inc (- n 1) filter))
