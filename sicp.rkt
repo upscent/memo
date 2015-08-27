@@ -255,3 +255,31 @@
   (define (add-dx x) (+ x dx))
   (* (sum f (+ a (/ dx 2.0)) add-dx b)
      dx))
+
+; 1.30
+
+(define (sum1 term a next b)
+  (define (iter a result)
+    (if (> a b)
+        result
+        (iter (next a) (+ result (term a)))))
+  (iter a 0))
+
+; 1.31
+
+(define (product1 term a next b)
+  (if (> a b)
+      1
+      (* (term a) (product1 term (next a) next b))))
+
+(define (product2 term a next b)
+  (define (iter a result)
+    (if (> a b)
+      result
+      (iter (next a) (* result (term a)))))
+  (iter a 1))
+
+(define (factorial n)
+  (define (identity x) x)
+  (define (iter x) (+ x 1))
+  (product2 identity 1 iter n))
