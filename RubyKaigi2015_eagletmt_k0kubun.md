@@ -1,0 +1,34 @@
+テンプレートエンジンについて
+- ERB, HAML, SLIM, ...
+- HAML vs SLIM
+  - SLIMの方がパフォーマンスが良い
+- Ruby の最適化
+  - ベンチマーク
+    - benchmark-ips gem
+    - 他のところが遅くなっていないか確認できる
+  - プロファイリング
+    - 遅いところを潰していく
+    - stackprof gem 処理ごとに計測
+    - rblineprof gem  行ごとに計測
+- Faml
+  - レンダリングを早くする
+  - SLIMがERBと同程度に早いのはなぜ？
+    - コンパイル時にわかることはコンパイル時に変換する
+      - parser gem
+  - コンパイル前後で行番号維持するの大事
+- Hamlit
+  - Slim を倒す
+  - 「Slimnの方が早いからSlim使う」人を撲滅する
+  - 早くするポイント
+    - string allocation
+      - Template::Genrator が freeze
+    - string concate
+      - string interplation
+    - 不要な機能を削る
+      - data attribute hyphenation
+      - boolean attribution
+- Hamlはメンテされてないのでよくない！
+  - メンテしてないわけではないよ by 作者の方？
+- ぜひ Faml か Hamlit を使ってみてください
+- Slim から Haml への変換はぬくもり手作業
+  - 変換スクリプトもいずれ書きたいと思ったけど手付かず
