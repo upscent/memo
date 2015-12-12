@@ -1,0 +1,16 @@
+- GOの機能`c-shared`
+  - Cのライブラリをシェアできる
+  - `cgo` CとGOの相互変換
+  - オプション `-buildmode c-shared`
+- rubyで使うには
+  - ruby-ffi gem
+  - fiddle
+- 数値の受け渡しは簡単
+- 文字列の場合は…？
+- Cの文字列変換メソッド
+  - C.CString と C.GoString の場合はコピーされるからユーザが責任をもってメモリから消去しなければいけない
+- cgoではマクロが使えない
+  - ラッパーしてあげる
+- コピーなしで文字列の変換を行う
+  - 変換したらコピーを削除する
+- 参考: https://github.com/mmasaki/memberlist
