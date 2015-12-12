@@ -1,0 +1,54 @@
+- メルカリなう
+- Rhebok
+  - rack handle/web server
+  - uunicorn
+  - Gazelのruby版
+    - Plackのサーバ
+    - CPUの使用率が1〜3%下がった
+  - あうとこ
+    - 最適化をしているサービス(レシピサイト/SNS/ゲーム)
+    - 通常はSQLが2/3くらいの時間を占める
+  - あわないとこ
+    - streaming?
+    - リバースプロキシがない
+  - サポート
+    - HTTP/1.1
+    - KeepAliveはさぽーとしてない
+    - リクエスト後にGCを走らせる
+  - 起動 `rackup -s Rhebok ...`
+  - hotdeploy
+    - `start_server --port -- rackup -s Rhebok ...`
+    - SIGHUP 新しいのが立ち上がる
+    - SIGTERM 新しいの起動後、リクエスト処理が終わったら古い方を終了する
+  - unicornとの比較
+    - rails, sinatraの場合だとあんまり違いがわからないかも？？
+    - ISUCON 4 のベンチマークで比較してもRhebokでも早い
+  - 使い方
+    - rack
+      - calls methodを実装
+      - env: リクエストのデータ、CGI keys、ラックの仕様
+      - response: `[HTTPステータス, HTTPヘッダー, body]`
+        - body: 配列、application object, file like object
+  - パフォーマンスの上げ方
+    - マルチプロセス
+    - マルチスレッド
+      - プロセスより切り替えが軽量
+    - IO をマルチに
+    - サービス例
+      - unicorn : multi process
+      - PUMA :
+      - Thin : multi process
+    - prefork_engine
+      - PerlのParallel::Preforkのruby版
+  - IOタイムアウト
+    - unicorn は処理中でも30秒たったらさよなら
+    - Cで実装
+  - HTTP parser
+    - 安全かつ高速な実装がいくつかある(Mongrel, Node.js PicoHTTPParser, ...)
+    - pico_http_parser gem 作ってみた
+  - TCP optimize
+    - TCP_NODELAY まとめて送る機能をオフにする
+      - 小さいパケットが大量にやり取りされるとネットワーク使いすぎてレイテンシ悪くなるので注意
+      - アプリケーション側でレスポンスをまとめる
+  - implemented C
+
