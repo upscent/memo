@@ -1,0 +1,36 @@
+- linuxport の maintener
+- 対応したバグ
+  - tcp select
+    - rubyのためにlinuxの仕様を変えた(怒られた
+  - Btrfs readdir failed
+- 2津のコミュニティで活動するコツは？
+  - OSSにパッチを当てるのはテトリスのようなものだ
+    - パッチを当てられるくらい元のコードがきれいでないと成立しない
+- debugging big 3
+  - Ftrace
+    - 使いかた簡単
+    - イベントごとに
+  - Perf
+    - サブコマンドがいっぱいある
+      - `perf top` 犯人がわからない時に検討をつける
+      - `perf trace`
+        - sysytem call を全部呼びだす
+        - 誰かわからんが〇〇しまくってるやつがいる
+      - Perf record and report
+  - SystemTap
+    - d-trace
+    - 言語仕様がクソ
+      - いい言語だとみんな開発して重くなるし
+    - カーネルモジュールとして動く
+    - rubyはsystemTapとd-traceに対応している
+    - rubyコンパイル時にrubyスクリプトの行とコンパイル後の行の対応票を作る
+    - https://github.com/ruby/ruby/blob/trunk/doc/extension.ja.rdoc#rubyの機能を使う
+    - zooming? すべてのライブラリがrubygems経由で呼び出されたことしかわからない
+- debugは生産性がないが難しい
+- 属人性のある作業になってしまう
+- 発表資料を作るとバグを見つかる！
+- SystemTapは無限ループ可能！
+- 引数の型は？
+  - Python はできるのでできるので…
+- 誰宛の発表？
+  - 障害ではないけど性能が著しく悪いときの原因特定用
