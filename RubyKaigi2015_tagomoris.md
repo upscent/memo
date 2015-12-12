@@ -1,0 +1,43 @@
+- tleasure data
+  - 解析以外にデータの蓄積、データの整形などもやっている
+  - かわいい！ステッカー大人気！
+    - fluentd
+    - embulk
+- data analytic platform and service
+  - 黄色い象に支配されている
+  - サービス: Redshift, Googleの
+  - JVMが多い
+- データの収集・整形・可視化
+- Platform
+  - 収集・保存
+  - console & API
+  - schemaのマネジメント
+  - タスクのスケジューリング
+  - データの取り込み・出力
+- Queue とワーカーについて
+- ほとんどOSSを使っている
+- ワーカがさばくジョブ 200k/day, 50query/day
+- multi-tenat data analytics
+- 細かいスケジューリング
+- PerfectSched https://github.com/treasure-data/perfectsched
+  - spfのないcrontab
+  - exactly-one は難しい。at-least-once実行にしている。
+    - べきとうせい
+  - PerfectQueueに変換する
+  - データの挿入は最大10数分、クエリは1日かかることも
+- PerfectQueue
+  - 優先度
+  - アカウントごとのJob数・実行可能なクエリ
+  - 今走っている処理を中断しない graceful restart
+  - スケーラビリティより柔軟性を重視
+  - Javaのプロパティで
+- Ruby
+  - 非常に多くのパラメータ・クエリを組み立てなければならない
+  - rspec や システムテストなども
+  - 可読性が悪いと
+  - パフォーマンスが高いに越したことはない
+  - ジョブの種類が増えてもちゃんと走るように(スケーラビリティ
+  - テストの可読性 indentended ひあどきゅめんと
+- スループットつらいときどうするの？
+  - 現在直面してる問題
+  -
