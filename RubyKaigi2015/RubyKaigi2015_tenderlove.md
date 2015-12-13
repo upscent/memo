@@ -1,0 +1,33 @@
+- [ManageIQ (http://manageiq.org/)
+  - 仮想VM
+- Ruby, Rails, Rack
+  - 責任を逃れる方法がわからないのでなってます！（ﾄﾞｯ
+- HTTP2
+  - developer からみると…
+    - 利点
+      - バイナリプロトコルなので扱いが楽。テキストより短い。
+      - 複数のリクエストをまとめて送る？
+      - ヘッダーの自動圧縮
+      - SSL
+      - Server Push
+    - ヘッダーはlower case
+- Rack
+  - 依存関係の爆発を解決(Adapter Perttern)
+  - ENV変数の構築
+  - Rack APIの問題
+    - 環境変数をハードコードしている
+    - streamingの場合は新しい環境変数を渡さない？
+- Requestの処理
+  - 呼び出し
+    - Rack::SendFile
+    - AD::Static
+    - AD::LoadInterlock
+    - ActiveSupport::..
+    - Rack::Runtime
+    - Rack::...
+    - AD::RequesterID
+    - Rack::Logger
+    - AD::ShowExceptions
+    - WebConsole あぶない！！
+    - ...
+    - Router

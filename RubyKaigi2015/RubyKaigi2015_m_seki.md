@@ -1,0 +1,20 @@
+- Actor vs Thread
+  - メモリ空間を共有できる
+- Actor Model
+  - Actor
+  - Message (Ether と呼ぶことも)
+  - Send / Receive: 都合のいいタイミングで送受信する
+    - 依存関係があるとリプライ待ちで全員止まる場合がある
+    - event drivenにする
+    - Fiberににてるなー？
+    - システム全体はActoer、中身はmultithredがよさそう
+  - 身近にあるActoerModel
+    - Win32, n○de.js
+- Ether
+  - 1
+    - Queue
+    - TupleSpace
+  - Rinder::TupleSpace
+    - 中央集権
+    - エーテルもアクターの1つ？
+- Actor は「よりよいThread」というけどそうでもないよ

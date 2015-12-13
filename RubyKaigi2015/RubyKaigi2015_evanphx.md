@@ -1,0 +1,27 @@
+- Ruby: 2020 どうやって3倍にするか
+- Rubinus, Puma benchmark-ips
+- CRuby needs a JIT
+- Performance
+  - 並列に
+    - CRubyは少ないコードをハンドリングする？
+    - コアライブラリは並列用の設計がされていない
+    - Strange な並列
+  - 少ないコードにする
+- 動的言語は早い
+- JITの利益は大きい
+- Strongtalk Performance
+  - https://en.wikipedia.org/wiki/Strongtalk
+- V8: Chrome用JSエンジン
+  - SELF とStrongtalkが適応されている
+- JIT compiler types
+- method JITs の問題
+- コンパイラのパフォーマンス
+- ユーザはコアライブラリの拡張を使っている
+- canary
+- [Rubinius](http://rubini.us/)
+- JRuby
+  - JVMの恩恵
+- Simple JIT
+- YARV を LLVM-IR に変換する
+- `rb_block_call` -> `rb_funcall`
+- MIPASWAP(Matz is paragmatic so we are paragmatic)
