@@ -1,0 +1,18 @@
+- フロントエンドもRubyで書きたい！
+- Ubiregi 作ってます
+  - Dashboard も
+    - 昔は Backbone.js
+    - 今は React.js
+      - virtual DOM
+      - JSX
+        - htmlっぽくかける！
+- 趣味で https://github.com/youchan/gohra つくってます！
+- https://github.com/youchan/hyalite
+  - Hyalite::Compnent::ShortHead (JSXに対応するもの
+  - Ruby を React.js に変換
+  - [Opal](http://opalrb.org/)
+    - SymbolはString
+    - `Kernel#proc` ブロックを受け取れない、引数リストにprocオブジェクトを渡す
+    - opal-browser
+  - クライアントでもサーバでも結局validatinoは必要。共通化できたらいいな。
+  - [flux](http://facebook.github.io/flux/)
