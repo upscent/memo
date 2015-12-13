@@ -1,0 +1,6 @@
+- many features, simple,
+- Design Pattern
+  - 1: DI
+  - 2: Plugin Loader
+  - 3: DI + Plugin Loader
+- shellscriptとbatファイルを兼ねた jarファイル
