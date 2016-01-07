@@ -98,14 +98,14 @@
 
 ; Q2.4
 
-(define (cons x y)
-  (lambda (m) (m x y)))
+;(define (cons x y)
+;  (lambda (m) (m x y)))
 
-(define (car z)
-  (z (lambda (p q) p)))
+;(define (car z)
+;  (z (lambda (p q) p)))
 
-(define (cdr z)
-  (z (lambda (p q) q)))
+;(define (cdr z)
+;  (z (lambda (p q) q)))
 
 ; Q2.5
 
@@ -237,3 +237,25 @@
     (div-interval one
                   (add-interval (div-interval one r1)
                                 (div-interval one r2)))))
+
+; Q2.25
+; (car (cdr (car (cdr (cdr '(1 3 (5 7) 9))))))
+; (car (car '((7))))
+; (car (cdr (car (cdr (car (cdr (car (cdr (car (cdr (car (cdr '(1 (2 (3 (4 (5 (6 7))))))))))))))))))
+
+; Q2.26
+; (define x '(1 2 3))
+; (define y '(4 5 6))
+
+; (append x y)
+; => '(1 2 3 4 5 6)
+; (cons x y)
+; => '((1 2 3) 4 5 6)
+; (list x y)
+; => '((1 2 3) (4 5 6))
+
+; Q2.27
+(define (deep-reverse x)
+  (if (pair? x)
+      (append (deep-reverse (cdr x)) (list (deep-reverse (car x))))
+      x))
