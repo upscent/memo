@@ -52,7 +52,9 @@ Example test_next_weekday:
 (** この宣言は二つのことを行っています。ひとつは、[saturday]の次の次にあたる平日が、[tuesday]であるということを確認する必要があるということを示すこと。もう一つは、後で参照しやすいように、その確認事項に[test_next_weekday]という名前を与えていることです。
     この確認事項を定義すれば、次のようなコマンドを流すだけで、Coqによって正しさを検証できます。 *)
 
-Proof. simpl. reflexivity.  Qed.
+Proof. simpl. reflexivity. Qed.
+
+(** = の実体は eq **)
 
 (** この文について細かいことは今は置いておきますが（じきに戻ってきます）、本質的には以下のような意味になります「我々が作成した確認事項は簡約後の同値チェックによって証明されました。」 *)
 
@@ -952,7 +954,14 @@ Proof.
 Theorem plus_swap' : forall n m p : nat,
   n + (m + p) = m + (n + p).
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros n m p.
+  rewrite -> plus_assoc'.
+  rewrite -> plus_assoc'.
+  replace (n + m) with (m + n).
+  reflexivity.
+  rewrite plus_comm.
+  reflexivity.
+Qed.
 (** [] *)
 
 
@@ -1000,6 +1009,11 @@ Proof.
 
 これを具体的に感じるため、[Fixpoint]で定義された、より「微妙な」関数の書き方を考えてみましょう（自然数に関する簡単な関数でかまいません）。それが全ての入力で停止することと、Coqがそれを、この制限のため受け入れてくれないことを確認しなさい。 *)
 
-(* FILL IN HERE *)
+Fixpoint hoge (n:nat) :=
+  match n with
+  | S  => O
+  | S n' => S (S (hoge n')) + S (S (hoge n'))
+  end.
+
 (** [] *)
 
