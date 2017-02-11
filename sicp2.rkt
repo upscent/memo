@@ -29,7 +29,7 @@
                (* numer y) (denom x))
             (* (denom x) (denom y))))
 
-;　Q2.2
+; Q2.2
 
 (define (make-point x y)
   (cons x y))
@@ -259,3 +259,100 @@
   (if (pair? x)
       (append (deep-reverse (cdr x)) (list (deep-reverse (car x))))
       x))
+
+; Q2.28
+(define (fringe x)
+  (if (pair? x)
+      (if (null? (cdr x))
+          (fringe (car x))
+          (append (fringe (car x)) (fringe (cdr x))))
+      (list x)))
+
+;-------------------------
+; Q2.29
+;-------------------------
+(define (make-mobile left right)
+  (list left right))
+(define (make-branch length structure)
+  (list length structure))
+
+;-------------------------
+; Q2.29 a
+;-------------------------
+(define (left-branch mobile) (car mobile))
+(define (right-branch mobile) (car (cdr mobile)))
+(define (branch-length branch) (car branch))
+(define (branch-structure branch)
+  (car (cdr branch)))
+
+;-------------------------
+; Q2.29 b
+;-------------------------
+(define (total-weight mobile)
+  (if (pair? mobile)
+      (+
+       (total-weight (branch-structure (left-branch mobile)))
+       (total-weight (branch-structure (right-branch mobile))))
+      mobile))
+
+;-------------------------
+; Q2.29 c
+;-------------------------
+(define (balanced? mobile)
+  ; バランスが取れている場合はpositive、そうでない場合は0を返す
+  (define (balanced-weight mobile)
+    (if (pair? mobile)
+        (let ((left-balanced-weight
+               (balanced-weight (branch-structure (left-branch mobile))))
+              (right-balanced-weight
+               (balanced-weight (branch-structure (right-branch mobile)))))
+          (if (and
+               (positive? left-balanced-weight)
+               (positive? right-balanced-weight)
+               (equal?
+                (* left-balanced-weight (branch-length (left-branch mobile)))
+                (* right-balanced-weight (branch-length (right-branch mobile)))))
+              (+ left-balanced-weight right-balanced-weight)
+              0))
+        mobile))
+  (positive? (balanced-weight mobile)))
+
+;ex
+(define balanced-mobile
+  (make-mobile
+   (make-branch 10 2)
+   (make-branch 20 1)))
+(define not-balanced-mobile
+  (make-mobile
+   (make-branch 10 2)
+   (make-branch 20 1)))
+
+;-------------------------
+; Q2.29 d
+;-------------------------
+; Q2.29 a だけ変更すれば良い
+
+;-------------------------
+; Q2.30
+;-------------------------
+(define (square-tree-1 tree)
+  (cond ((null? tree) nil)
+        ((not (pair? tree)) (expt tree 2))
+        (else (cons (scale
+(define (square-tree-2 tree)
+  (map (lambda (sub-tree)
+         (if (pair? sub-tree)
+             (square-tree sub-tree)
+             (expt sub-tree 2)))
+       tree))
+;ex
+(define q2-30-ex-input
+  (list 1
+        (list 2
+              (list 3
+                    4)
+              5)
+        (list 6
+              7)))
+; > (square-tree q2-30-ex-input)
+; '(1 (4 (9 16) 25) (36 49))
