@@ -7,6 +7,7 @@ defmodule Issues.Mixfile do
      elixir: "~> 1.4",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
+     preferred_cli_env: [espec: :test],
      deps: deps()]
   end
 
@@ -30,6 +31,7 @@ defmodule Issues.Mixfile do
     [
       {:httpoison, "~> 0.11.0"},
       {:poison,    "~> 3.0.0"},
+      {:espec, "~> 1.3.2", only: :test},
     ]
   end
 end
