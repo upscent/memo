@@ -1,10 +1,13 @@
 defmodule Issues.CLI do
-  @default_count 4
   @moduledoc """
   Handle the command line parsing and the dispatch to
   the various functions that end up generating a
   table of the last _n_ issues in a github project
   """
+
+  @default_count 4
+  @delimiter " | "
+  @delimiter_for_border "-+-"
 
   def run(argv) do
     argv
@@ -37,12 +40,15 @@ defmodule Issues.CLI do
     System.halt(0)
   end
   def process({user, project, count}) do
+    header = ["number", "created_at", "title"]
+
     Issues.GithubIssues.fetch(user, project)
     |> decode_response
     |> convert_to_list_of_maps
-    |> sort_into_ascending_order
+    |> Enum.sort_by(&(&1["created_at"]))
     |> Enum.take(count)
-    |> print_table(["number", "created_at", "title"])
+    |> convert_to_printable_values(header)
+    |> print_table(header)
   end
 
   def decode_response({:ok, body}), do: body
@@ -53,53 +59,38 @@ defmodule Issues.CLI do
   end
 
   def convert_to_list_of_maps(list) do
-    IO.puts """
-    convert_to_list_of_maps
-    """
     list |> Enum.map(&Enum.into(&1, Map.new))
   end
 
-  def sort_into_ascending_order(list_of_issues) do
-    list_of_issues
-    |> Enum.sort(fn i1, i2 -> i1["created_at"] <= i2["created_at"] end)
+  def print_table(printable_rows, header) do
+    widths = _max_widths_of_column(printable_rows, header)
+
+    _print_row(header, widths)
+    widths
+    |> Enum.map(&(String.duplicate("-", &1)))
+    |> _print_row(widths, @delimiter_for_border)
+    Enum.each(printable_rows, &(_print_row(&1, widths)))
   end
 
-  def print_table(rows, columns) do
-    printable_rows = take_printable_values(rows, columns)
-    widths = max_widths_of_column(printable_rows, columns)
-    print(printable_rows, columns, widths)
+  def convert_to_printable_values(rows, header) do
+    for r <- rows, do: for c <- header, do: _convert_to_printable_value(r[c])
   end
+  def _convert_to_printable_value(v) when is_binary(v), do: v
+  def _convert_to_printable_value(v) when is_integer(v), do: Integer.to_string(v)
+  def _convert_to_printable_value(v), do: raise RuntimeError, message: "can not convert #{inspect(v)} to string."
 
-  def take_printable_values(rows, columns) do
-    for r <- rows, do: for c <- columns, do: convert_to_printable_value(r[c])
-  end
-
-  def convert_to_printable_value(v) when is_binary(v), do: v
-  def convert_to_printable_value(v) when is_integer(v), do: Integer.to_string(v)
-  def convert_to_printable_value(v), do: raise RuntimeError, message: "can not convert #{v} to string."
-
-  def max_widths_of_column(printable_rows, columns) do
-    columns
-    |> Enum.with_index()
-    |> Enum.map(fn {column, index} ->
-      [column | Enum.map(printable_rows, &(Enum.fetch!(&1, index)))]
-      |> Enum.map(&String.length/1)
-      |> Enum.max
+  def _max_widths_of_column(printable_rows, header) do
+    [ header | printable_rows ]
+    |> Enum.zip()
+    |> Enum.map(fn col ->
+      col |> Tuple.to_list() |> Enum.map(&String.length/1) |> Enum.max()
     end)
   end
 
-  @delimiter " | "
-  def print(printable_rows, columns, widths) do
-    print_row(columns, widths)
-    IO.puts String.duplicate("-", Enum.sum(widths) + (length(columns) - 1) * String.length(@delimiter))
-    Enum.each(printable_rows, &(print_row(&1, widths)))
-  end
-
-  def print_row(printable_row, widths) do
+  def _print_row(printable_row, widths, delimiter \\ @delimiter) do
     Enum.zip(printable_row, widths)
-    |> Enum.map(fn {row, width} -> String.pad_leading(row, width) end)
-    |> Enum.join(@delimiter)
-    |> IO.puts
-    :defalut
+    |> Enum.map(fn {row, width} -> String.pad_trailing(row, width) end)
+    |> Enum.join(delimiter)
+    |> IO.puts()
   end
 end

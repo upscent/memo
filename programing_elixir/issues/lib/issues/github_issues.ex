@@ -3,7 +3,6 @@ defmodule Issues.GithubIssues do
   @github_url Application.get_env(:issues, :github_url)
 
   def fetch(user, project) do
-    IO.puts "Issues.GithubIssues.fetch"
     issues_url(user, project)
     |> HTTPoison.get(@user_agent)
     |> handle_response
@@ -14,7 +13,6 @@ defmodule Issues.GithubIssues do
   end
 
   def handle_response({:ok, %HTTPoison.Response{status_code: 200, body: body}}) do
-    IO.puts "handle_response, :ok"
     {:ok, Poison.Parser.parse!(body)}
   end
 
