@@ -9,7 +9,7 @@ defmodule Issues.CLI do
   @delimiter " | "
   @delimiter_for_border "-+-"
 
-  def run(argv) do
+  def main(argv) do
     argv
     |> parse_args
     |> process
