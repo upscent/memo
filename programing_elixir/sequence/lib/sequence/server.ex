@@ -1,6 +1,12 @@
 defmodule Sequence.Server do
   use GenServer
 
+  @name :list_server
+  def start_link(list),        do: GenServer.start_link(__MODULE__, list, name: @name)
+  def next_number,             do: GenServer.call @name, :next_number
+  def set_number(num),         do: GenServer.call @name, {:set_number, num}
+  def increment_number(delta), do: GenServer.cast @name, {:increment_number, delta}
+
   def handle_call(:next_number, _from, current_number) do
     {:reply, current_number, current_number + 1}
   end
